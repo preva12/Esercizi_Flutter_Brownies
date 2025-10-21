@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 25, 8, 55)),
       ),
       home: const CounterPage(),
     );
@@ -67,10 +67,14 @@ class _CounterPageState extends State<CounterPage> {
     _counterpiu = 0;  
     _countermeno = 0;
         });
-  
   }
-  
-  // TODO: implement more functions as a bonus
+
+  void _halveCounter(){
+    setState(() {
+          _counterpiu = _counterpiu ~/2;
+          _countermeno = _countermeno ~/2;
+        });
+      }
 
   @override
   Widget build(BuildContext context) {
@@ -82,28 +86,33 @@ class _CounterPageState extends State<CounterPage> {
             'Contatore'),
           Text(
             '$_contatore', 
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: TextStyle(fontSize: 32, color: Colors.red),
           ),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FloatingActionButton(
+              ElevatedButton.icon(
                 onPressed: _decrementCounter,
-                tooltip: 'Decrement',
-                child: const Icon(Icons.remove),
+                label: const Text('1'),
+                icon: const Icon(Icons.remove),
               ),
               const SizedBox(width: 20),
-              FloatingActionButton(
+              ElevatedButton.icon(
                 onPressed: _incrementCounter,
-                tooltip: 'Increment',
-                child: const Icon(Icons.add),
+                label: const Text('1'),
+                icon: const Icon(Icons.add),
               ),
-              FloatingActionButton(
+              const SizedBox(width: 20),
+              ElevatedButton.icon(
                 onPressed: _reset,
-                tooltip: 'Reset',
-                child: const Icon(Icons.traffic_outlined),
-              ),// TODO: more...
+                label: const Text('Reset'),
+                icon: const Icon(Icons.reset_tv),
+              ),
+              ElevatedButton.icon(
+                onPressed: _halveCounter,
+                label: const Text('/'),
+              ),
             ],
           ),
         ],
