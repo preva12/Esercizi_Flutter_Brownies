@@ -1,127 +1,110 @@
 import 'package:flutter/material.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MaterialApp(home: WidgetSaluto()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  
-
-  final String title;
+class WidgetSaluto extends StatefulWidget { //questo blocco definisce un widget stateful
+  const WidgetSaluto({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<WidgetSaluto> createState() => _WidgetSalutoState(); //cambia stato nel tempo
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController _variabile =TextEditingController();
-  String _messaggio= '';
+class _WidgetSalutoState extends State<WidgetSaluto> {
+  late final FormGroup _formulario; // form che contiene i campi di testo
+  String _messaggio = ''; // Messaggio da mostrare che cambia in base alla variabile
 
-  void Ciao() {
-    setState(() {
-     final messaggiofinale = _variabile.text.trim();
-     if (messaggiofinale.isEmpty){
-      _messaggio = 'inserisci il tuo nome';
-       
-     }
-      else{
-        _messaggio = 'Ciao $messaggiofinale';
-      }
+  @override
+  void initState() {
+    super.initState(); // chiama il metodo initState 
+    _formulario = FormGroup({
+      'saluto': FormControl<String>(value: ''),// campo per il saluto
+      'nome': FormControl<String>(value: ''), // campo per il nome dell'utente
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Padding(
-          padding :const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text('inserisci il tuo nome:',
-                style: TextStyle(fontSize: 30),
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                controller: _variabile,
-                
+  void dispose() { //pulire correttamente il widget quando non serve più
+    _formulario.dispose();
+    super.dispose();
+  }
 
+  void _aggiornaSaluto() {
+    final saluto = _formulario.control('saluto').value as String? ?? ''; //assegna a saluto la frase che scrive l'utente
+    final nome = _formulario.control('nome').value as String? ?? '';
+
+    setState(() {
+      if (saluto.isNotEmpty && nome.isNotEmpty) { //prende i valori inseriti dall'utente e aggiorna _messaggio in base a cosa scrive l'utente
+        _messaggio = "$saluto $nome";
+      } else if (saluto.isNotEmpty) {
+        _messaggio = saluto;
+      } else if (nome.isNotEmpty) {
+        _messaggio = nome;
+      } else {
+        _messaggio = '';
+      }
+    });
+  }
+
+  void _pulisciFormulario() { //reset formulario
+    _formulario.reset();
+    setState(() {
+      _messaggio = '';
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {  //popolazione widgete
+    return Scaffold(
+      appBar: AppBar(title: const Text("esercizio 1.2")),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: ReactiveForm(
+          formGroup: _formulario,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ReactiveTextField<String>(
+                formControlName: 'saluto',
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Inserisci il tuo saluto (ciao, hello, yo)',
                 ),
-          
+                onChanged: (_) => _aggiornaSaluto(),
+              ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: Ciao,
-                child: const Text('Saluta!!'),
-              ),
-              const SizedBox(height: 25),
-              Text(
-                _messaggio,
-                style: const TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
+              ReactiveTextField(
+                formControlName: 'nome',
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Inserisci il tuo nome',
                 ),
-                
+                onChanged: (_) => _aggiornaSaluto(),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _messaggio = '';
-                    _variabile.clear();
-                  });
-                },
-                child: const Text('Resetta'),
+              const SizedBox(height: 20),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _pulisciFormulario,
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          
+                        ),
+                        foregroundColor: const Color.fromARGB(255, 28, 216, 18)
+                      ),
+                      child: const Text('Pulisci'),
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(height: 30),
+              Text(_messaggio),
             ],
           ),
         ),
@@ -129,5 +112,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-
