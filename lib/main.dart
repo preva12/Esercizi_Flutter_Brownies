@@ -80,13 +80,13 @@ class PaginaDettaglio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("${contatto.nome} ${contatto.cognome}")),
+      appBar: AppBar(title: Text("{contatto.nome} {contatto.cognome}")),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Numeri di telefono:", style: TextStyle(fontSize: 18)),
+            const Text("Numeri di telefono:", style: TextStyle(fontSize: 15)),
             const SizedBox(height: 10),
             ...contatto.numero.map((numero) => Text(numero)),
           ],
