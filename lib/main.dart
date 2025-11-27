@@ -31,7 +31,6 @@ class MiaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: const PaginaHome(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -48,9 +47,7 @@ class PaginaHome extends StatelessWidget {
         children: listaContatti.map((contatto) {
           return ListTile(
             title: Text("${contatto.nome} ${contatto.cognome}"),
-            subtitle: Text(
-              contatto.numero.isNotEmpty ? contatto.numero.first : "Nessun numero",
-            ),
+           
             onTap: () {
               Navigator.push(
                 context,
