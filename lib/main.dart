@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(const MiaApp());
 }
 
-// final perchè quella variabile non puo essere piu modificata
+// Modello contatto
 class Contatto {
   final String nome;
   final String cognome;
@@ -18,25 +17,26 @@ class Contatto {
   });
 }
 
-// contatti
+// Lista contatti
 final List<Contatto> listaContatti = [
   Contatto(nome: "Marco", cognome: "Rossi", numero: ["123456789"]),
-  Contatto(nome: "Sergio", cognome: "Gialli", numero:  ["123456789", "111111111"]),
+  Contatto(nome: "Sergio", cognome: "Gialli", numero: ["123456789", "111111111"]),
 ];
 
-// APP
+// App principale
 class MiaApp extends StatelessWidget {
   const MiaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PaginaHome(),
+      home: const PaginaHome(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-// schermata principale
+// Schermata principale
 class PaginaHome extends StatelessWidget {
   const PaginaHome({super.key});
 
@@ -44,34 +44,29 @@ class PaginaHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Rubrica")),
-      body: ListView.builder(
-        itemCount: listaContatti.length,
-        itemBuilder: (context, index) {
-          final contatto = listaContatti[index];
-
+      body: ListView(
+        children: listaContatti.map((contatto) {
           return ListTile(
             title: Text("${contatto.nome} ${contatto.cognome}"),
             subtitle: Text(
-              contatto.numero.isNotEmpty
-                  ? contatto.numero.first
-                  : "Nessun numero",
+              contatto.numero.isNotEmpty ? contatto.numero.first : "Nessun numero",
             ),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder:(e) => PaginaDettaglio(contatto: contatto),
+                  builder: (_) => PaginaDettaglio(contatto: contatto),
                 ),
               );
             },
           );
-        },
+        }).toList(),
       ),
     );
   }
 }
 
-// pagina di contatto
+// Pagina di dettaglio contatto
 class PaginaDettaglio extends StatelessWidget {
   final Contatto contatto;
 
@@ -80,7 +75,7 @@ class PaginaDettaglio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("{contatto.nome} {contatto.cognome}")),
+      appBar: AppBar(title: Text("${contatto.nome} ${contatto.cognome}")),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
