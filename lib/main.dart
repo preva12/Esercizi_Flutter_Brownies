@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 
 void main() {
   runApp(const MiaApp());
@@ -60,7 +60,7 @@ class PaginaHome extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => PaginaDettaglio(contatto: contatto),
+                  builder:(e) => PaginaDettaglio(contatto: contatto),
                 ),
               );
             },
@@ -88,7 +88,7 @@ class PaginaDettaglio extends StatelessWidget {
           children: [
             const Text("Numeri di telefono:", style: TextStyle(fontSize: 18)),
             const SizedBox(height: 10),
-            ...contatto.numero.map((numero) => Text(numero)).toList(),
+            ...contatto.numero.map((numero) => Text(numero)),
           ],
         ),
       ),
