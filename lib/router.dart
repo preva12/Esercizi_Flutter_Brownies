@@ -9,16 +9,16 @@ part 'router.g.dart';
 @riverpod
 GoRouter router(Ref ref) {
   final router = GoRouter(
-    initialLocation: "/prodotti",
+    initialLocation: "/products",
     routes: [
       GoRoute(
-        path: "/prodotti",
+        path: "/products",
         builder: (context, state) {
           return ProductsScreen();
         },
       ),
       GoRoute(
-        path: "/carrello",
+        path: "/cart",
         builder: (context, state) {
           return CartScreen();
         } ,

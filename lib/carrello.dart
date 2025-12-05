@@ -1,11 +1,11 @@
-import 'prodotti.dart';
+import 'products.dart';
 
-class ItemCarrello {
-  final Prodotti prodotto;
-  int quantita;
+class ItemCart {
+  final Products product;
+  int quantity;
 
-  ItemCarrello({
-    required this.prodotto, 
-    this.quantita = 1
+  ItemCart({
+    required this.product, 
+    this.quantity = 1
     });
 }

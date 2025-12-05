@@ -16,7 +16,7 @@ class CartScreen extends ConsumerWidget {
           ? const Center(
               child: Text(
                 "Il carrello è vuoto",
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 20),
               ),
             )
           : ListView(
@@ -27,14 +27,14 @@ class CartScreen extends ConsumerWidget {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(item.prodotto.nome),
+                        Text(item.product.name),
                         Row(
                           children: [
                             IconButton(
                               icon: const Icon(Icons.remove),
                               onPressed: () => cartNotifier.decrementItem(item),
                             ),
-                            Text('${item.quantita}'),
+                            Text('${item.quantity}'),
                             IconButton(
                               icon: const Icon(Icons.add),
                               onPressed: () => cartNotifier.incrementItem(item),
@@ -43,7 +43,7 @@ class CartScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    subtitle: Text("${item.prodotto.prezzo} €"),
+                    subtitle: Text("${item.product.price} €"),
                   ),
                 const SizedBox(height: 20),
                 Text(
